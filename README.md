@@ -3,19 +3,19 @@ A jQuery plugin for trapping tab inside an object. Useful for ensuring keyboard 
 
 ## Usage
 ```.tabtrap()```
-``` js
+```javascript
 $('.modal').tabtrap();
 ```
 
 ## Methods
 ```.tabtrap(options)```
-``` js
+```javascript
 $('.modal').tabtrap({
   disableOnEscape: false
 });
 ```
 ```.tabtrap('disable')```
-``` js
+```javascript
 $('.modal #close').on('click', function (e) {
   $('.modal').tabtrap('disable');
 });
