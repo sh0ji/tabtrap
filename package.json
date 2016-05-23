@@ -1,0 +1,26 @@
+{
+  "name": "tabtrap",
+  "version": "1.0.0",
+  "description": "A jQuery plugin for trapping tab inside an object",
+  "main": "tabtrap.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sh0ji/tabtrap.git"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "accessibility",
+    "a11y",
+    "tab",
+    "focus"
+  ],
+  "author": "Evan Yamanishi",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/sh0ji/tabtrap/issues"
+  },
+  "homepage": "https://github.com/sh0ji/tabtrap#readme"
+}
