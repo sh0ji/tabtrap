@@ -41,3 +41,12 @@ $('#close').on('click', function (e) {
   $('.modal').tabtrap('disable');
 });
 ```
+
+`.tabtrap('toggle')`
+```javascript
+$('.modal').on('keydown', function (e) {
+  if (e.which === 84) {     // 't'
+    $('.modal').tabtrap('toggle');
+  }
+});
+```
