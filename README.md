@@ -11,10 +11,11 @@ Manages tab keypresses on the selected element (`.modal` in this example), but o
 ## Options
 
 | Option | Type | Default |
-| - | - | - |
+| ------ | ---- | ------- |
 | `disableOnEscape` | boolean | `false` |
 | `jQueryUI` | boolean | automatic* |
 | `tabbableElements` | string | `'a[href]:not([tabindex="-1"]), map[name] area[href]:not([tabindex="-1"]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), iframe:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"]), [contentEditable=true]:not([tabindex="-1"])'` |
+\* Tests existence of `$.ui` to determine if jQuery UI is available.
 
 
 ## Methods
