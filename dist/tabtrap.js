@@ -12,7 +12,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.1.0): tabtrap.js
+ * Tabtrap (v1.1.2): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -27,11 +27,10 @@ var Tabtrap = function ($) {
      */
 
     var NAME = 'tabtrap';
-    var VERSION = '1.1.0';
+    var VERSION = '1.1.2';
     var DATA_KEY = 'a11y.tabtrap';
     var EVENT_KEY = '.' + DATA_KEY;
     var JQUERY_NO_CONFLICT = $.fn[NAME];
-    var CLASS_PREFIX = 'a11y-tabtrap';
     var ESCAPE_KEYCODE = 27;
     var TAB_KEYCODE = 9;
 
@@ -41,14 +40,14 @@ var Tabtrap = function ($) {
     };
 
     var DefaultType = {
-        jQueryUI: 'boolean',
         disableOnEscape: 'boolean',
         tabbableElements: 'string'
     };
 
     var Event = {
-        KEYDOWN_DISABLE: 'keydown.dismiss' + EVENT_KEY,
-        KEYDOWN_TAB: 'keydown.tab' + EVENT_KEY
+        KEYDOWN_DISABLE: 'keydown.disable' + EVENT_KEY,
+        KEYDOWN_TAB: 'keydown.tab' + EVENT_KEY,
+        TAB_PRESS: 'tab' + EVENT_KEY
     };
 
     /**
@@ -123,18 +122,23 @@ var Tabtrap = function ($) {
             value: function _manageFocus() {
                 var _this = this;
 
-                $(document).off(Event.KEYDOWN_TAB).on(Event.KEYDOWN_TAB, function (event) {
-                    if (!_this._isEnabled || $(_this._element).is(':hidden')) return true;
+                $(this._element).off(Event.KEYDOWN_TAB).on(Event.KEYDOWN_TAB, function (event) {
+                    if (!_this._isEnabled && !$(_this._element).is(':visible')) return true;
                     if (event.which === TAB_KEYCODE) {
+                        $(document).trigger(Event.TAB_PRESS);
                         var tabIndex = _this._$tabbable.index(event.target);
-                        if (event.shiftKey) {
-                            if (tabIndex === 0) {
-                                event.preventDefault();
-                                _this._$tabbable.last().focus();
-                            }
-                        } else if (tabIndex < 0 || tabIndex === _this._$tabbable.length - 1) {
+                        var conditions = {
+                            outside: tabIndex < 0,
+                            wrapForward: tabIndex === _this._$tabbable.length - 1 && !event.shiftKey,
+                            wrapBackward: tabIndex === 0 && event.shiftKey
+                        };
+                        if (conditions.outside || conditions.wrapForward) {
                             event.preventDefault();
                             _this._$tabbable.first().focus();
+                        }
+                        if (conditions.wrapBackward) {
+                            event.preventDefault();
+                            _this._$tabbable.last().focus();
                         }
                     }
                 });
