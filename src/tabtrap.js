@@ -28,7 +28,6 @@ const Tabtrap = (($) => {
     }
 
     const DefaultType = {
-        jQueryUI: 'boolean',
         disableOnEscape: 'boolean',
         tabbableElements: 'string'
     }
