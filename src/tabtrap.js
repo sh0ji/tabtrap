@@ -1,6 +1,6 @@
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.1.0): tabtrap.js
+ * Tabtrap (v1.1.1): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -15,11 +15,10 @@ const Tabtrap = (($) => {
      */
 
     const NAME = 'tabtrap'
-    const VERSION = '1.1.0'
+    const VERSION = '1.1.1'
     const DATA_KEY = 'a11y.tabtrap'
     const EVENT_KEY = `.${DATA_KEY}`
     const JQUERY_NO_CONFLICT = $.fn[NAME]
-    const CLASS_PREFIX = 'a11y-tabtrap'
     const ESCAPE_KEYCODE = 27
     const TAB_KEYCODE = 9
 
@@ -35,8 +34,9 @@ const Tabtrap = (($) => {
     }
 
     const Event = {
-        KEYDOWN_DISABLE: `keydown.dismiss${EVENT_KEY}`,
-        KEYDOWN_TAB: `keydown.tab${EVENT_KEY}`
+        KEYDOWN_DISABLE : `keydown.disable${EVENT_KEY}`,
+        KEYDOWN_TAB     : `keydown.tab${EVENT_KEY}`,
+        TAB_PRESS       : `tab${EVENT_KEY}`
     }
 
 
@@ -135,20 +135,25 @@ const Tabtrap = (($) => {
         }
 
         _manageFocus() {
-            $(document)
+            $(this._element)
                 .off(Event.KEYDOWN_TAB)
                 .on(Event.KEYDOWN_TAB, (event) => {
-                    if (!this._isEnabled || $(this._element).is(':hidden')) return true
+                    if (!this._isEnabled && !$(this._element).is(':visible')) return true
                     if (event.which === TAB_KEYCODE) {
+                        $(document).trigger(Event.TAB_PRESS)
                         let tabIndex = this._$tabbable.index(event.target)
-                        if (event.shiftKey) {
-                            if (tabIndex === 0) {
-                                event.preventDefault()
-                                this._$tabbable.last().focus()
-                            }
-                        } else if (tabIndex < 0 || tabIndex === this._$tabbable.length - 1) {
+                        let conditions = {
+                            outside: tabIndex < 0,
+                            wrapForward: tabIndex === this._$tabbable.length - 1 && !event.shiftKey,
+                            wrapBackward: tabIndex === 0 && event.shiftKey
+                        }
+                        if (conditions.outside || conditions.wrapForward) {
                             event.preventDefault()
                             this._$tabbable.first().focus()
+                        }
+                        if (conditions.wrapBackward) {
+                            event.preventDefault()
+                            this._$tabbable.last().focus()
                         }
                     }
                 })
