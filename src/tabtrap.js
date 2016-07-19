@@ -1,6 +1,6 @@
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.1.2): tabtrap.js
+ * Tabtrap (v1.1.3): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -15,7 +15,7 @@ const Tabtrap = (($) => {
      */
 
     const NAME = 'tabtrap'
-    const VERSION = '1.1.2'
+    const VERSION = '1.1.3'
     const DATA_KEY = 'a11y.tabtrap'
     const EVENT_KEY = `.${DATA_KEY}`
     const JQUERY_NO_CONFLICT = $.fn[NAME]
