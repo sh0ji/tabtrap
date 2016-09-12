@@ -12,7 +12,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.1.2): tabtrap.js
+ * Tabtrap (v1.1.3): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -27,7 +27,7 @@ var Tabtrap = function ($) {
      */
 
     var NAME = 'tabtrap';
-    var VERSION = '1.1.2';
+    var VERSION = '1.1.4';
     var DATA_KEY = 'a11y.tabtrap';
     var EVENT_KEY = '.' + DATA_KEY;
     var JQUERY_NO_CONFLICT = $.fn[NAME];
@@ -36,7 +36,9 @@ var Tabtrap = function ($) {
 
     var Default = {
         disableOnEscape: false,
-        tabbableElements: 'a[href]:not([tabindex="-1"]), map[name] area[href]:not([tabindex="-1"]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), iframe:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"]), [contentEditable=true]:not([tabindex="-1"])'
+        tabbableElements: ['a[href]:not([tabindex="-1"])',
+        // area must be descendant of a named map
+        'map[name] area[href]:not([tabindex="-1"])', 'input:not([disabled]):not([tabindex="-1"])', 'select:not([disabled]):not([tabindex="-1"])', 'textarea:not([disabled]):not([tabindex="-1"])', 'button:not([disabled]):not([tabindex="-1"])', 'iframe:not([tabindex="-1"])', 'object:not([tabindex="-1"])', 'embed:not([tabindex="-1"])', '[tabindex]:not([tabindex="-1"])', '[contentEditable=true]:not([tabindex="-1"])'].join(',')
     };
 
     var DefaultType = {
