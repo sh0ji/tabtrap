@@ -12,7 +12,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.1.3): tabtrap.js
+ * Tabtrap (v1.1.4): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
