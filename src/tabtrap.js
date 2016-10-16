@@ -1,19 +1,16 @@
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v2.0.0): tabtrap.js
+ * Tabtrap (v1.2.0): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
  */
 
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
+/* CONSTANTS */
 
 const NAME = 'tabtrap'
-const VERSION = '2.0.0'
+const VERSION = '1.2.0'
 const DATA_KEY = 'tabtrap'
 
 const KEYCODE = {
@@ -51,11 +48,7 @@ const Event = {
 const jQueryAvailable = window.jQuery !== undefined
 
 
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+/* CLASS DEFINITION */
 
 class Tabtrap {
 
@@ -208,11 +201,8 @@ class Tabtrap {
 }
 
 
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- */
+/* JQUERY INTERFACE INITIALIZATION */
+
 if (jQueryAvailable) {
     const JQUERY_NO_CONFLICT = jQuery.fn[NAME]
     jQuery.fn[NAME] = Tabtrap._jQueryInterface
