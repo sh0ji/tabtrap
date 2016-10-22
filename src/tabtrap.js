@@ -1,6 +1,6 @@
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.2.1): tabtrap.js
+ * Tabtrap (v1.2.2): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -10,7 +10,7 @@
 /* CONSTANTS */
 
 const NAME = 'tabtrap'
-const VERSION = '1.2.1'
+const VERSION = '1.2.2'
 const DATA_KEY = 'tabtrap'
 
 const KEYCODE = {
