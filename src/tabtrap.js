@@ -60,7 +60,6 @@ class Tabtrap {
 
         this._createEventListener()
         if (this.config.disableOnEscape) this._setEscapeEvent()
-        console.log(this)
     }
 
 

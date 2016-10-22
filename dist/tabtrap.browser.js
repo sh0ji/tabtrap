@@ -60,7 +60,6 @@ var Tabtrap = function () {
 
         this._createEventListener();
         if (this.config.disableOnEscape) this._setEscapeEvent();
-        console.log(this);
     }
 
     // getters
