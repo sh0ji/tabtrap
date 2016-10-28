@@ -13,7 +13,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.2.5): tabtrap.js
+ * Tabtrap (v1.2.6): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -22,7 +22,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /* CONSTANTS */
 
 var NAME = 'tabtrap';
-var VERSION = '1.2.5';
+var VERSION = '1.2.6';
 var DATA_KEY = 'tabtrap';
 
 var KEYCODE = {
@@ -254,10 +254,6 @@ var Tabtrap = function () {
 
     return Tabtrap;
 }();
-
-var tabtrap = function tabtrap(element, config) {
-    return Tabtrap.trapAll(element, config);
-};
 
 /* JQUERY INTERFACE INITIALIZATION */
 
