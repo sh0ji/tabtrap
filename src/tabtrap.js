@@ -1,6 +1,6 @@
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.2.4): tabtrap.js
+ * Tabtrap (v1.2.5): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -10,7 +10,7 @@
 /* CONSTANTS */
 
 const NAME = 'tabtrap'
-const VERSION = '1.2.4'
+const VERSION = '1.2.5'
 const DATA_KEY = 'tabtrap'
 
 const KEYCODE = {
@@ -47,6 +47,19 @@ const Event = {
 
 const jQueryAvailable = window.jQuery !== undefined
 
+const getNodeList = (selector) => {
+    switch (typeof selector) {
+        case 'string':
+            return document.querySelectorAll(selector)
+            break
+        case 'object':
+            return (selector.nodeType === 1) ? selector : getNodeList(selector.selector)
+            break
+        default:
+            throw new Error('Must provide a selector or element')
+    }
+}
+
 
 /* CLASS DEFINITION */
 
@@ -54,7 +67,7 @@ class Tabtrap {
 
     constructor(element, config) {
         this.config = this._getConfig(element, config)
-        this.element = this.config.element
+        this.element = this._assertElement(this.config.element)
         this.enabled = true
         this.tabbable = this._getTabbable()
 
@@ -115,30 +128,22 @@ class Tabtrap {
 
     // private
 
-    _getElement(selector) {
-        switch (typeof selector) {
-            case 'string':
-                return document.querySelectorAll(selector)
-                break
-            case 'object':
-                return (selector.nodeType === 1) ? selector : this._getGalleryElements(selector.selector)
-                break
-            default:
-                throw new Error('Must provide a selector')
-        }
-    }
-
-    _getConfig(selector, config) {
+    _getConfig(element, config) {
         let _config = {}
-        if (typeof selector === 'object' && selector.nodeType === undefined) {
-            _config = selector
+        // check if element is actually the config object (with config.element)
+        if (typeof element === 'object' && element.nodeType === undefined) {
+            _config = element
         } else {
-            _config.element = this._getElement(selector)
+            _config.element = element
         }
         return Object.assign({},
             this.constructor.Default,
             _config
         )
+    }
+
+    _assertElement(el) {
+        return (el.nodeType === 1) ? el : (typeof el === 'string') ? document.querySelector(el) : null
     }
 
     _getTabbable() {
@@ -212,12 +217,19 @@ class Tabtrap {
         })
     }
 
-    static trap(element, config) {
-        return new Tabtrap(element, config)
+    static trapAll(element, config) {
+        let nodeList = getNodeList(element)
+        let _config = (typeof config === 'object') ? config : {}
+        Array.from(nodeList).forEach((node) => {
+            _config.element = node
+            new Tabtrap(_config)
+        })
     }
-
 }
 
+const tabtrap = (element, config) => {
+    return Tabtrap.trapAll(element, config)
+}
 
 /* JQUERY INTERFACE INITIALIZATION */
 

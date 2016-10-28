@@ -4,15 +4,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.2.4): tabtrap.js
+ * Tabtrap (v1.2.5): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -21,7 +21,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /* CONSTANTS */
 
 var NAME = 'tabtrap';
-var VERSION = '1.2.4';
+var VERSION = '1.2.5';
 var DATA_KEY = 'tabtrap';
 
 var KEYCODE = {
@@ -46,6 +46,19 @@ var Event = {
 
 var jQueryAvailable = window.jQuery !== undefined;
 
+var getNodeList = function getNodeList(selector) {
+    switch (typeof selector === 'undefined' ? 'undefined' : _typeof(selector)) {
+        case 'string':
+            return document.querySelectorAll(selector);
+            break;
+        case 'object':
+            return selector.nodeType === 1 ? selector : getNodeList(selector.selector);
+            break;
+        default:
+            throw new Error('Must provide a selector or element');
+    }
+};
+
 /* CLASS DEFINITION */
 
 var Tabtrap = function () {
@@ -53,7 +66,7 @@ var Tabtrap = function () {
         _classCallCheck(this, Tabtrap);
 
         this.config = this._getConfig(element, config);
-        this.element = this.config.element;
+        this.element = this._assertElement(this.config.element);
         this.enabled = true;
         this.tabbable = this._getTabbable();
 
@@ -86,29 +99,21 @@ var Tabtrap = function () {
         // private
 
     }, {
-        key: '_getElement',
-        value: function _getElement(selector) {
-            switch (typeof selector === 'undefined' ? 'undefined' : _typeof(selector)) {
-                case 'string':
-                    return document.querySelectorAll(selector);
-                    break;
-                case 'object':
-                    return selector.nodeType === 1 ? selector : this._getGalleryElements(selector.selector);
-                    break;
-                default:
-                    throw new Error('Must provide a selector');
-            }
-        }
-    }, {
         key: '_getConfig',
-        value: function _getConfig(selector, config) {
+        value: function _getConfig(element, config) {
             var _config = {};
-            if ((typeof selector === 'undefined' ? 'undefined' : _typeof(selector)) === 'object' && selector.nodeType === undefined) {
-                _config = selector;
+            // check if element is actually the config object (with config.element)
+            if ((typeof element === 'undefined' ? 'undefined' : _typeof(element)) === 'object' && element.nodeType === undefined) {
+                _config = element;
             } else {
-                _config.element = this._getElement(selector);
+                _config.element = element;
             }
             return Object.assign({}, this.constructor.Default, _config);
+        }
+    }, {
+        key: '_assertElement',
+        value: function _assertElement(el) {
+            return el.nodeType === 1 ? el : typeof el === 'string' ? document.querySelector(el) : null;
         }
     }, {
         key: '_getTabbable',
@@ -195,9 +200,14 @@ var Tabtrap = function () {
             });
         }
     }, {
-        key: 'trap',
-        value: function trap(element, config) {
-            return new Tabtrap(element, config);
+        key: 'trapAll',
+        value: function trapAll(element, config) {
+            var nodeList = getNodeList(element);
+            var _config = (typeof config === 'undefined' ? 'undefined' : _typeof(config)) === 'object' ? config : {};
+            Array.from(nodeList).forEach(function (node) {
+                _config.element = node;
+                new Tabtrap(_config);
+            });
         }
     }, {
         key: 'NAME',
@@ -243,6 +253,10 @@ var Tabtrap = function () {
 
     return Tabtrap;
 }();
+
+var tabtrap = function tabtrap(element, config) {
+    return Tabtrap.trapAll(element, config);
+};
 
 /* JQUERY INTERFACE INITIALIZATION */
 
