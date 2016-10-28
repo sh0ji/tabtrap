@@ -1,6 +1,6 @@
 {
   "name": "tabtrap",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "A plugin for trapping focus inside an object",
   "main": "dist/tabtrap.module.js",
   "scripts": {
