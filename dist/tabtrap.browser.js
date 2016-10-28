@@ -13,7 +13,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.2.3): tabtrap.js
+ * Tabtrap (v1.2.4): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -22,7 +22,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /* CONSTANTS */
 
 var NAME = 'tabtrap';
-var VERSION = '1.2.3';
+var VERSION = '1.2.4';
 var DATA_KEY = 'tabtrap';
 
 var KEYCODE = {
