@@ -1,6 +1,6 @@
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.2.2): tabtrap.js
+ * Tabtrap (v1.2.3): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -10,7 +10,7 @@
 /* CONSTANTS */
 
 const NAME = 'tabtrap'
-const VERSION = '1.2.2'
+const VERSION = '1.2.3'
 const DATA_KEY = 'tabtrap'
 
 const KEYCODE = {
@@ -53,9 +53,9 @@ const jQueryAvailable = window.jQuery !== undefined
 class Tabtrap {
 
     constructor(element, config) {
-        this.el = element
+        this.config = this._getConfig(element, config)
+        this.element = this.config.element
         this.enabled = true
-        this.config = this._getConfig(config)
         this.tabbable = this._getTabbable()
 
         this._createEventListener()
@@ -115,15 +115,34 @@ class Tabtrap {
 
     // private
 
-    _getConfig(config) {
+    _getElement(selector) {
+        switch (typeof selector) {
+            case 'string':
+                return document.querySelectorAll(selector)
+                break
+            case 'object':
+                return (selector.nodeType === 1) ? selector : this._getGalleryElements(selector.selector)
+                break
+            default:
+                throw new Error('Must provide a selector')
+        }
+    }
+
+    _getConfig(selector, config) {
+        let _config = {}
+        if (typeof selector === 'object' && selector.nodeType === undefined) {
+            _config = selector
+        } else {
+            _config.element = this._getElement(selector)
+        }
         return Object.assign({},
             this.constructor.Default,
-            config
+            _config
         )
     }
 
     _getTabbable() {
-        return this.el.querySelectorAll(this.config.tabbableElements.join(','))
+        return this.element.querySelectorAll(this.config.tabbableElements.join(','))
     }
 
     _getKeyCode(event) {
@@ -132,10 +151,10 @@ class Tabtrap {
 
     _createEventListener() {
         if (jQueryAvailable) {
-            jQuery(this.el).off(Event.KEYDOWN_TAB)
-            jQuery(this.el).on(Event.KEYDOWN_TAB, (e) => this._manageFocus(e))
+            jQuery(this.element).off(Event.KEYDOWN_TAB)
+            jQuery(this.element).on(Event.KEYDOWN_TAB, (e) => this._manageFocus(e))
         } else {
-            this.el.addEventListener('keydown', (e) => this._manageFocus(e))
+            this.element.addEventListener('keydown', (e) => this._manageFocus(e))
         }
     }
 
@@ -159,7 +178,7 @@ class Tabtrap {
     }
 
     _setEscapeEvent() {
-        this.el.addEventListener(Event.KEYDOWN_DISABLE, (e) => {
+        this.element.addEventListener(Event.KEYDOWN_DISABLE, (e) => {
             if (this._getKeyCode(e) === KEYCODE.ESCAPE) {
                 this.disable()
             }

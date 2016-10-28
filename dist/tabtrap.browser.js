@@ -13,7 +13,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.2.2): tabtrap.js
+ * Tabtrap (v1.2.3): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -22,7 +22,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /* CONSTANTS */
 
 var NAME = 'tabtrap';
-var VERSION = '1.2.2';
+var VERSION = '1.2.3';
 var DATA_KEY = 'tabtrap';
 
 var KEYCODE = {
@@ -53,9 +53,9 @@ var Tabtrap = function () {
     function Tabtrap(element, config) {
         _classCallCheck(this, Tabtrap);
 
-        this.el = element;
+        this.config = this._getConfig(element, config);
+        this.element = this.config.element;
         this.enabled = true;
-        this.config = this._getConfig(config);
         this.tabbable = this._getTabbable();
 
         this._createEventListener();
@@ -87,14 +87,34 @@ var Tabtrap = function () {
         // private
 
     }, {
+        key: '_getElement',
+        value: function _getElement(selector) {
+            switch (typeof selector === 'undefined' ? 'undefined' : _typeof(selector)) {
+                case 'string':
+                    return document.querySelectorAll(selector);
+                    break;
+                case 'object':
+                    return selector.nodeType === 1 ? selector : this._getGalleryElements(selector.selector);
+                    break;
+                default:
+                    throw new Error('Must provide a selector');
+            }
+        }
+    }, {
         key: '_getConfig',
-        value: function _getConfig(config) {
-            return Object.assign({}, this.constructor.Default, config);
+        value: function _getConfig(selector, config) {
+            var _config = {};
+            if ((typeof selector === 'undefined' ? 'undefined' : _typeof(selector)) === 'object' && selector.nodeType === undefined) {
+                _config = selector;
+            } else {
+                _config.element = this._getElement(selector);
+            }
+            return Object.assign({}, this.constructor.Default, _config);
         }
     }, {
         key: '_getTabbable',
         value: function _getTabbable() {
-            return this.el.querySelectorAll(this.config.tabbableElements.join(','));
+            return this.element.querySelectorAll(this.config.tabbableElements.join(','));
         }
     }, {
         key: '_getKeyCode',
@@ -107,12 +127,12 @@ var Tabtrap = function () {
             var _this = this;
 
             if (jQueryAvailable) {
-                jQuery(this.el).off(Event.KEYDOWN_TAB);
-                jQuery(this.el).on(Event.KEYDOWN_TAB, function (e) {
+                jQuery(this.element).off(Event.KEYDOWN_TAB);
+                jQuery(this.element).on(Event.KEYDOWN_TAB, function (e) {
                     return _this._manageFocus(e);
                 });
             } else {
-                this.el.addEventListener('keydown', function (e) {
+                this.element.addEventListener('keydown', function (e) {
                     return _this._manageFocus(e);
                 });
             }
@@ -142,7 +162,7 @@ var Tabtrap = function () {
         value: function _setEscapeEvent() {
             var _this2 = this;
 
-            this.el.addEventListener(Event.KEYDOWN_DISABLE, function (e) {
+            this.element.addEventListener(Event.KEYDOWN_DISABLE, function (e) {
                 if (_this2._getKeyCode(e) === KEYCODE.ESCAPE) {
                     _this2.disable();
                 }
