@@ -1,6 +1,6 @@
 /**
  * --------------------------------------------------------------------------
- * Tabtrap (v1.2.5): tabtrap.js
+ * Tabtrap (v1.2.6): tabtrap.js
  * by Evan Yamanishi
  * Licensed under GPL-3.0
  * --------------------------------------------------------------------------
@@ -10,7 +10,7 @@
 /* CONSTANTS */
 
 const NAME = 'tabtrap'
-const VERSION = '1.2.5'
+const VERSION = '1.2.6'
 const DATA_KEY = 'tabtrap'
 
 const KEYCODE = {
@@ -225,10 +225,6 @@ class Tabtrap {
             new Tabtrap(_config)
         })
     }
-}
-
-const tabtrap = (element, config) => {
-    return Tabtrap.trapAll(element, config)
 }
 
 /* JQUERY INTERFACE INITIALIZATION */
