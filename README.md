@@ -50,6 +50,15 @@ The browser version can be used directly in the browser as a standalone file. jQ
 ```javascript
 Tabtrap.trap('.modal', { disableOnEscape: true })
 ```
+You can also place the element or element selector inside the options object.
+
+`Tabtrap(options)`
+```javascript
+Tabtrap.trap({
+    element: '.modal',
+    disableOnEscape: true
+})
+```
 
 **The following methods are used with jQuery**
 `.tabtrap('enable')`
