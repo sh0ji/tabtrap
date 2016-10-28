@@ -12,10 +12,10 @@ import tabtrap from 'tabtrap'
 // non-es6
 var tabtrap = require('tabtrap')
 
-// initialize with the static .trap() method
-tabtrap.trap('.modal')
+// initialize with the static .trapAll() method to trap multiple elements
+tabtrap.trapAll('.modal')
 
-// initialize with the class
+// initialize with the class (only traps the first element found)
 new tabtrap('.modal')
 ```
 
@@ -46,15 +46,15 @@ The browser version can be used directly in the browser as a standalone file. jQ
 
 ## Methods
 
-`Tabtrap(element[, options])`
+`Tabtrap.trapAll(element[, options])`
 ```javascript
-Tabtrap.trap('.modal', { disableOnEscape: true })
+Tabtrap.trapAll('.modal', { disableOnEscape: true })
 ```
-You can also place the element or element selector inside the options object.
+You can also place the element or element selector inside the options object:
 
-`Tabtrap(options)`
+`Tabtrap.trapAll(options)`
 ```javascript
-Tabtrap.trap({
+Tabtrap.trapAll({
     element: '.modal',
     disableOnEscape: true
 })
