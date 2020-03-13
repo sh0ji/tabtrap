@@ -1,86 +1,65 @@
 # tabtrap
-Trap focus inside an object. Useful for ensuring keyboard accessibility of modal dialogs.
+
+> Trap focus inside an element. Useful for ensuring keyboard accessibility of modal dialogs.
 
 ## Usage
-Tabtrap comes with versions for two environments: a dev module version, and a standalone browser version. There are multiple ways to initialize the trap in both versions.
-
-### tabtrap.module.js
-The module version should be used in dev environments that are using import/require module patterns. It won't work as a standalone file in the browser.
-```javascript
-// es6
-import tabtrap from 'tabtrap'
-// non-es6
-var tabtrap = require('tabtrap')
-
-// initialize with the static .trapAll() method to trap multiple elements
-tabtrap.trapAll('.modal')
-
-// initialize with the class (only traps the first element found)
-new tabtrap('.modal')
-```
-
-### tabtrap.browser.js
-The browser version can be used directly in the browser as a standalone file. jQuery is optional.
-```html
-<body>
-    ...
-    <script src="jquery.min.js" type="text/javascript"></script>
-    <script src="tabtrap.browser.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        // initialize with jQuery
-        $('.modal').tabtrap()
-
-        // initialize without jQuery
-        new tabtrap('.modal')
-    </script>
-</body>
-```
 
 ## Options
+
+All options are typed in [the `TabtrapOptions` interface](blob/master/src/tabtrap.ts#L3).
 
 | Option | Type | Default |
 | ------ | ---- | ------- |
 | `disableOnEscape` | boolean | `false` |
-| `tabbableElements` | object | ([view source](blob/master/src/tabtrap.js#L23-L35)) |
+| `tabbableElements` | string, NodeList, function | All valid focusable elements ([focusable.ts](blob/master/src/focusable.ts)) |
+| `wrap` | boolean | `true` |
 
+## API
 
-## Methods
+The primary API is the `trapFocus` export, which takes an element and options.
 
-`Tabtrap.trapAll(element[, options])`
 ```javascript
-Tabtrap.trapAll('.modal', { disableOnEscape: true })
-```
-You can also place the element or element selector inside the options object:
+import { trapFocus } from 'tabtrap';
 
-`Tabtrap.trapAll(options)`
-```javascript
-Tabtrap.trapAll({
-    element: '.modal',
-    disableOnEscape: true
-})
+const myEl = document.querySelector('.my-element');
+const opts = { wrap: false };
+
+trapFocus(myEl, opts);
 ```
 
-**The following methods are used with jQuery**
-`.tabtrap('enable')`
+### Methods and Properties
+
+Tabtrap also includes a few methods and properties that may be helpful.
+
+* `Tabtrap.create(el, opts)` (static method): create a `Tabtrap` instance.
+   - Note that this just creates the instance. Tab will not be trapped inside your element.
+* `Tabtrap.instances` (static property): an array of all the in-scope `Tabtrap` instances.
+* `.enable()` (instance method): turn on the tab trap.
+* `.disable()` (instance method): disable the tab trap but keep the instance intact.
+* `.destroy()` (instance method): destroy the instance entirely (also disables the tab trap).
+
+#### Example
+
 ```javascript
-$('#open').on('click', (e) => {
-  $('.modal').tabtrap('enable')
-})
+import Tabtrap from 'tabtrap';
+
+const myEl = document.querySelector('.my-element');
+const opts = {};  // whatever overrides you like
+
+const tabtrap = Tabtrap.create(myEl, opts);
+
+tabtrap.enable();
+// focus is now trapped inside `myEl`
+
+console.log(Tabtrap.instances.length);
+// 1
+
+tabtrap.disable();
+// focus can now escape `myEl`
+
+tabtrap.destroy();
+
+console.log(Tabtrap.instances.length);
+// 0
 ```
 
-`.tabtrap('disable')`
-```javascript
-$('#close').on('click', (e) => {
-  $('.modal').tabtrap('disable');
-});
-```
-
-`.tabtrap('toggle')`
-```javascript
-// probably don't do this.
-$(document).on('keydown', function (e) {
-  if (e.which === 84) {     // 't'
-    $('.modal').tabtrap('toggle');
-  }
-});
-```
