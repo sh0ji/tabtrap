@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "strict": true,
+    "moduleResolution": "Node",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*"]
+}
