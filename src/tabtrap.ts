@@ -56,6 +56,8 @@ class Tabtrap {
 	public disable(): this {
 		if (!this.enabled) return this;
 
+		this.referenceElement.removeEventListener('keydown', this.manageFocus);
+
 		this.enabled = false;
 		return this;
 	}
